@@ -6,7 +6,6 @@ use Illuminate\Support\Facades\Auth;
 use Livewire\WithFileUploads;
 use Livewire\Component;
 use Livewire\WithPagination;
-use App\Services\GoogleService;
 use App\Models\Person;
 use Exception;
 use RecursiveDirectoryIterator;
@@ -22,21 +21,29 @@ class Organize extends Component {
     protected $cliente;
 
     public $login_id_usuario;
+
+    public $caminho_deteccao_python_exe;
     public $caminho_compilador_python;
     public $caminho_deteccao_python;
+
+    public $caminho_pasta_public;
     public $caminho_arquivo_log;
     public $caminho_arquivo_pickle;
     public $caminho_arquivo_npy;
+    public $caminho_resultado;   
+
     public $query_filtro_pessoa; 
-    public $filtro_caminho_origem;
-    public $filtro_caminho_destino;
+
     public $filtro_pessoa_organizar; 
     public $filtro_data_inicial;
     public $filtro_data_final;
     public $filtro_copiar_recortar;
     public $filtro_resolucao;
+
     public $habilitar_data; 
+
     public $nome_botao_log; 
+
     public $downloadLink;
 
     // Função construtora da pagina no blade "Organizar".
@@ -46,24 +53,25 @@ class Organize extends Component {
         $this->login_id_usuario = Auth::id();
 
         // Definindo as variaveis com os caminhos do compilador e aplicação Python.
+        $this->caminho_deteccao_python_exe = storage_path('app\\public\\deteccao\\dist\\principal.exe'); 
         $this->caminho_compilador_python = 'C:\\Users\\renan\\anaconda3\\envs\\Projeto_Deteccao\\python.exe';
-        $this->caminho_deteccao_python = storage_path('app\\public\\deteccao\\main.py'); 
+        $this->caminho_deteccao_python = storage_path('app\\public\\deteccao\\principal.py'); 
         
         // Definindo as variaveis com os caminhos dos arquivos e diretórios.
+        $this->caminho_pasta_public = storage_path('app\\public');
         $this->caminho_arquivo_log = storage_path('app\\public\\' .$this->login_id_usuario .'\\log.txt');
         $this->caminho_arquivo_pickle = storage_path('app\\public\\' .$this->login_id_usuario .'\\indicesTreinamento.pickle');
         $this->caminho_arquivo_npy = storage_path('app\\public\\' .$this->login_id_usuario .'\\fotosTreinamento.npy');
+        $this->caminho_resultado = storage_path('app\\public\\' .$this->login_id_usuario .'\\resultado'); 
 
         // Definindo variavel de filtro da query de pessoas.
         $this->query_filtro_pessoa = '';
 
-        // Definindo as variaveis dos filtro para realizar a rotina de organizar.
-        $this->filtro_caminho_origem = storage_path('app\\public\\' .$this->login_id_usuario .'\\temp');
-        $this->filtro_caminho_destino = storage_path('app\\public\\' .$this->login_id_usuario .'\\resultado'); 
+        // Definindo as variaveis dos filtro para realizar a rotina de organizar.       
         $this->filtro_data_inicial = now()->toDateString();
         $this->filtro_data_final = now()->toDateString();
         $this->filtro_pessoa_organizar = '';
-        $this->filtro_copiar_recortar = '0';
+        $this->filtro_copiar_recortar = 'copiar';
         $this->filtro_resolucao = '1';
 
         // Definindo as variaveis referentes aos status dos edits dos filtros.
@@ -76,10 +84,9 @@ class Organize extends Component {
     }
 
     public function render() 
-    {
-        $nomeApp = "FotoPlus";  
+    { 
         $listaPessoas = (new Person())->searchPeopleByName($this->query_filtro_pessoa);   
-        return view('livewire.organize', compact('nomeApp', 'listaPessoas'));
+        return view('livewire.organize', compact('listaPessoas'));
     }  
 
     // Função responsavel em atribuir a pessoa selecionada na tabela para o treinamento.
@@ -119,7 +126,7 @@ class Organize extends Component {
             if (file_exists($this->caminho_arquivo_log)) {
                 $texto_completo_log = file($this->caminho_arquivo_log);   
                 if (count($texto_completo_log) >= 2) {
-                    $texto_penultima_linha_log = $texto_completo_log[count($texto_completo_log) - 2];    
+                    $texto_penultima_linha_log = $texto_completo_log[count($texto_completo_log) - 1];    
                 } else {
                     $texto_penultima_linha_log = $texto_completo_log;
                 }
@@ -194,35 +201,23 @@ class Organize extends Component {
             } else {
                 $this->filtro_data_inicial = 'None'; 
                 $this->filtro_data_final = 'None'; 
-            }
-
-            // Verifica se foi peenchido o caminho da pasta com as imagens, e depois 
-            // realizar o download dessas fotos.
-            if (session('caminhoPastaGoogleDrive') == '') {
-                session()->flash('error', 'Favor informar uma pasta de origem contendo as imagens.');
-                return redirect()->route('organize');   
-            } else {
-                $googleServico = new GoogleService();
-                $googleServico->baixarPasta($this->filtro_data_inicial, $this->filtro_data_final);
-            }      
+            }   
 
             $parametros = [     
-                '1',                            // Parametro referente a rotina de treianento que será realizada no python.          
-                $this->filtro_caminho_origem,   // Parametro referente ao caminho de origem.
-                $this->filtro_caminho_destino,  // Parametro referente ao caminho de destino.
-                $this->caminho_arquivo_log,     // Parametro referente ao caminho do arquivo log gerado pelo Python.
-                $this->caminho_arquivo_pickle,  // Parametro referente ao caminho do arquivo pickle.
-                $this->caminho_arquivo_npy,     // Parametro referente ao caminho do arquivo npy.
-                $this->filtro_pessoa_organizar, // Parametro referente ao id da pessoa que vai realizar o treinamento do rosto.
-                $this->filtro_data_inicial,     // Parametro referente a data inicial do conjunto das fotos. 
-                $this->filtro_data_final,       // Parametro referente a data final do conjunto das fotos. 
-                $this->filtro_copiar_recortar,  // Parametro referente se as fotos devem ser copiadas ou recortadas.
-                $this->filtro_resolucao         // Parametro referente quanto deve aumentar resolução das imagens.
+                'organiza',                         // Parametro referente a rotina de organizar que será realizada no python.          
+                $this->caminho_pasta_public,        // Parametro referente ao caminho da pasta public.
+                $this->login_id_usuario,            // Parametro referente ao ID do usuario logado.
+                session('caminhoPastaGoogleDrive'), // Parametro referente ao ID Pasta Google Drive
+                $this->filtro_data_inicial,         // Parametro referente a data inicial do conjunto das fotos. 
+                $this->filtro_data_final,           // Parametro referente a data final do conjunto das fotos. 
+                $this->filtro_copiar_recortar,      // Parametro referente se as fotos devem ser copiadas ou recortadas.
+                $this->filtro_resolucao,            // Parametro referente quanto deve aumentar resolução das imagens.
+                $this->filtro_pessoa_organizar      // Parametro referente ao ID da pessoa que vai realizar o treinamento do rosto.
             ];
 
             // Chamada externa do python para realizar a organização das fotos 
             // referente aos filtros selecionados.
-            $comando = $this->caminho_compilador_python .' ' .$this->caminho_deteccao_python .' ' .implode(' ', $parametros);           
+            $comando = $this->caminho_deteccao_python_exe .' ' .implode(' ', $parametros);       
             session()->flash('debug', 'Comando: ' .$comando);  
 
             $comando = escapeshellcmd($comando);
@@ -230,8 +225,9 @@ class Organize extends Component {
 
             // Mostra o conteudo do arquivo log minimizado.
             $this->mostrarLogMinimizado();
-
             $this->criarZip();
+
+            session()->put('caminhoPastaGoogleDrive',  '');
 
             // Redireciona para a rota de download
             return redirect()->route('download-zip', ['user_id' => $this->login_id_usuario]); 
@@ -245,8 +241,8 @@ class Organize extends Component {
 
     public function criarZip()
     {
-        $folderPath = $this->filtro_caminho_destino; // Caminho da pasta de resultado
-        $zipFilePath = storage_path('app\\public\\' . $this->login_id_usuario . '\\resultado.zip');
+        $folderPath = $this->caminho_resultado; // Caminho da pasta de resultado
+        $zipFilePath = storage_path('app\\public\\' .$this->login_id_usuario .'\\resultado.zip');
 
         $zip = new ZipArchive;
         if ($zip->open($zipFilePath, ZipArchive::CREATE | ZipArchive::OVERWRITE) === TRUE) {

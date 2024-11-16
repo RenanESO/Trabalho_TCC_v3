@@ -21,7 +21,7 @@
 
                 <!-- Inicio :: Carregamento -->
                 <div class="alert alert-primary text-center shadow-sm p-3 mx-3 mb-3 rounded"  wire:loading.grid wire:target="image_pessoa_treinamento, treinarPessoa, cadastrarPessoa, selecionarPessoa, alterarTamanhoLog, buscarImagem">
-                    <i class="fas fa-spinner fa-spin"></i> <span class="alert-text"> Aguarde Carregando... </span>
+                    <i class="fas fa-spinner fa-spin"></i> <span class="alert-text"> Aguarde alguns minutos carregando... </span>
                 </div>
                 <!-- Fim :: Carregamento -->
 

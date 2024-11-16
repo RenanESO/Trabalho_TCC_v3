@@ -2,10 +2,12 @@
 
 namespace App\Livewire;
 
+use App\Models\GoogleToken;
 use App\Services\GoogleService;
 use Livewire\Component;
+use Illuminate\Support\Facades\Auth;
 
-class BrowseGoogleDrivefolders extends Component 
+class BrowseGoogleDrivefolders extends Component
 {
     public $arquivos = [];
     public $idPasta = 'root';
@@ -15,7 +17,7 @@ class BrowseGoogleDrivefolders extends Component
     public $retonarRota;
 
     // Função construtora do componente "PastaDownloadServidor".
-    public function mount($retonarRota = 'dashboard') 
+    public function mount($retonarRota = 'dashboard')
     {
         $this->retonarRota = $retonarRota;
         $this->listarArquivos();
@@ -23,30 +25,31 @@ class BrowseGoogleDrivefolders extends Component
     }
 
     // Função render do componente "PastaDownloadServidor".
-    public function render() 
-    {   
+    public function render()
+    {
         return view('livewire.browse-google-drivefolders', [
             'arquivos' => $this->arquivos,
         ]);
     }
 
-    // Função responsavel em listar todos arquivos da pasta selecionada 
+    // Função responsavel em listar todos arquivos da pasta selecionada
     // do Google Drive.
-    public function listarArquivos() 
+    public function listarArquivos()
     {
         $googleServico = new GoogleService();
         $cliente = $googleServico->getClient();
-    
-        if (session('access_token')) {
-            $cliente->setAccessToken(session('access_token'));
+        $googleToken = GoogleToken::where('user_id', Auth::id())->first();
+
+        if ($googleToken) {
+            $cliente->setAccessToken($googleToken->toArray());
             $drive = $googleServico->getDriveService();
-    
+
             $query = "'{$this->idPasta}' in parents and (mimeType contains 'application/vnd.google-apps.folder' or mimeType contains 'image/jpeg' or mimeType contains 'image/png' or mimeType contains 'image/gif')";
             $resultados = $drive->files->listFiles([
                 'q' => $query,
                 'fields' => 'files(id, name, mimeType, webViewLink)'
             ]);
-    
+
             $this->arquivos = array_map(fn($arquivo) => [
                 'id' => $arquivo->getId(),
                 'nome' => $arquivo->getName(),
@@ -57,14 +60,14 @@ class BrowseGoogleDrivefolders extends Component
             return redirect($cliente->createAuthUrl());
         }
     }
-    
-    public function obterCaminhoAtualPasta() 
+
+    public function obterCaminhoAtualPasta()
     {
         $googleServico = new GoogleService();
         $cliente = $googleServico->getClient();
-
-        if (session('access_token')) {
-            $cliente->setAccessToken(session('access_token'));
+        $googleToken = GoogleToken::where('user_id', Auth::id())->first();
+        if ($googleToken) {
+            $cliente->setAccessToken($googleToken->toArray());
             $drive = $googleServico->getDriveService();
 
             $caminhoPasta = '';
@@ -80,7 +83,7 @@ class BrowseGoogleDrivefolders extends Component
         }
     }
 
-    public function alterarPasta($idPasta) 
+    public function alterarPasta($idPasta)
     {
         array_push($this->historicoPastas, $this->idPasta);
         $this->idPasta = $idPasta;
@@ -88,24 +91,24 @@ class BrowseGoogleDrivefolders extends Component
         $this->caminhoPasta = $this->obterCaminhoAtualPasta();
     }
 
-    // Função responsavel em selecionar a pasta com todos arquivos do 
-    // Google Drive, para depois realizar o download da pasta para 
+    // Função responsavel em selecionar a pasta com todos arquivos do
+    // Google Drive, para depois realizar o download da pasta para
     // realizar a rotina python.
-    public function selecionar() 
+    public function selecionar()
     {
         session()->put('caminhoPastaGoogleDrive',  $this->idPasta);
-        return redirect()->route($this->retonarRota); 
+        return redirect()->route($this->retonarRota);
     }
 
-    // Função responsavel em voltar uma pasta da pasta atual para 
+    // Função responsavel em voltar uma pasta da pasta atual para
     // realizar a navegação entre pastas.
-    public function voltar() 
+    public function voltar()
     {
         if (!empty($this->historicoPastas)) {
             $this->idPasta = array_pop($this->historicoPastas);
             $this->listarArquivos();
             $this->caminhoPasta = $this->obterCaminhoAtualPasta();
         }
-    }       
+    }
 }
 

@@ -15,7 +15,7 @@
                     <div class="card-body">
                         <h5 class="card-title">Organizar conjunto de fotos</h5>
                         <p class="card-text">
-                            Organize suas fotos localizadas no Google Drive ou OneDrive pelos 
+                            Organize suas fotos localizadas no Google Drive pelos 
                             filtros de data e pessoas. Ajudando na organização de 
                             sua galeria.
                         </p>
@@ -35,7 +35,7 @@
                         <h5 class="card-title">Encontrar duplicidade de fotos</h5>
                         <p class="card-text">
                             Encontre possíveis duplicidades de fotos localizadas em uma pasta 
-                            específica no Google Drive ou OneDrive.
+                            específica no Google Drive.
                         </p>
                     </div>
                     <div class="card-footer d-grid gap-2">
@@ -53,7 +53,7 @@
                         <h5 class="card-title">Treinamento IA</h5>
                         <p class="card-text">
                             Realize o treinamento manual de rosto para encontrar uma pessoa em específico 
-                            em sua galeria de fotos localizada no Google Drive ou OneDrive.
+                            em sua galeria de fotos localizada no Google Drive.
                         </p>
                     </div>
                     <div class="card-footer d-grid gap-2">

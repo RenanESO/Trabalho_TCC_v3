@@ -2,9 +2,11 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Services\DownloadController;
+use Illuminate\Support\Facades\Auth;
 
 // Rota de download da pasta
 Route::get('/download-zip/{user_id}', [DownloadController::class, 'download'])->name('download-zip');
+Route::get('/download-and-redirect/{user_id}', [DownloadController::class, 'downloadAndRedirect'])->name('download-and-redirect');
 
 // Rota para a pagina inicial do projeto
 Route::get('/', function () {
@@ -41,4 +43,11 @@ Route::middleware([
         return view('dashboard');
     })->name('dashboard');
 });
+
+Route::post('/logout', function () {
+    Auth::logout(); // Desloga o usuário
+    return view('welcome');
+})->name('logout');
+
+
 

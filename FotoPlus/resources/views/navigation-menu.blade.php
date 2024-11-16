@@ -15,7 +15,11 @@
             <!-- Inicio :: Nome Usuario -->
             @auth
                 <div id="bem-vindo">
-                    <span> Bem vindo {{ Auth::user()->name }} #{{ Auth::user()->id }} </span>     
+                    <span class="text-muted"> Bem vindo {{ Auth::user()->name }} #{{ Auth::user()->id }} </span>     
+
+                    @if(session('google_user_email'))
+                        <span class="text-muted">| Google Drive: {{ session('google_user_email') }} </span>
+                    @endif
                 </div>     
             @endauth
             <!-- Fim :: Nome Usuario -->

@@ -21,7 +21,7 @@
 
                 <!-- Inicio :: Carregamento -->
                 <div class="alert alert-primary text-center shadow-sm p-3 mx-3 mb-3 rounded" wire:loading.grid wire:target="organizar, selecionarPessoa, alterarTamanhoLog, alterarStatusData">
-                    <i class="fas fa-spinner fa-spin"></i> <span class="alert-text"> Aguarde Carregando... </span>
+                    <i class="fas fa-spinner fa-spin"></i> <span class="alert-text"> Aguarde alguns minutos carregando... </span>
                 </div>
                 <!-- Fim :: Carregamento -->
 
@@ -133,7 +133,7 @@
                                             <div class="col-lg">
                                                 <div class="form-check form-switch">
                                                     <input class="form-check-input" type="checkbox" wire:click="alterarStatusData">
-                                                    <label class="form-check-label" for="flexSwitchCheckDefault"> Deseja organizar a(s) foto(s) por data </label>
+                                                    <label class="form-check-label" for="flexSwitchCheckDefault"> Deseja filtrar a(s) foto(s) por data </label>
                                                 </div>
                                             </div>
                                         </div>
@@ -180,16 +180,27 @@
                                             <select id="filtroResolucao" class="form-select" wire:model="filtro_resolucao">
                                                 <option value="1"> 1x </option>
                                                 <option value="2"> 2x </option>
-                                                <option value="3"> 3x </option>
                                             </select>
                                         </div>
                                     </div>
                                     <!-- Fim :: 1ª Coluna - Card 2º Passo -->
-
+                                    
                                 </div>
                                 <!-- Fim :: 3ª Linha - Card 2º Passo -->
 
                                 <!-- Inicio :: 4ª Linha - Card 2º Passo -->
+                                <div class="row mb-3">
+
+                                    <!-- Inicio :: 1ª Coluna - Card 2º Passo -->
+                                    <div class="col-md-7">    
+                                        <span class="text-danger"> Atenção: Aumentando resolução afeta no tempo de carregamento. </span>
+                                    </div>
+                                    <!-- Fim :: 1ª Coluna - Card 2º Passo -->
+
+                                </div>
+                                <!-- Fim :: 4ª Linha - Card 2º Passo -->                                
+
+                                <!-- Inicio :: 5ª Linha - Card 2º Passo -->
                                 <div class="row mb-3">
 
                                     <!-- Inicio :: 1ª Coluna - Card 2º Passo -->    
@@ -202,9 +213,9 @@
                                     <!-- Fim :: 1ª Coluna - Card 2º Passo -->   
 
                                 </div>
-                                <!-- Fim :: 4ª Linha - Card 2º Passo -->
+                                <!-- Fim :: 5ª Linha - Card 2º Passo -->
 
-                                <!-- Inicio :: 3ª Linha - Card 2º Passo -->
+                                <!-- Inicio :: 6ª Linha - Card 2º Passo -->
                                 <div class="row mb-3">
                             
                                     <!-- Inicio :: 1ª Coluna - Card 2º Passo -->    
@@ -214,9 +225,9 @@
                                     <!-- Fim :: 1ª Coluna - Card 2º Passo -->   
 
                                 </div>
-                                <!-- Fim :: 3ª Linha - Card 2º Passo -->
+                                <!-- Fim :: 6ª Linha - Card 2º Passo -->
 
-                                <!-- Inicio :: 5ª Linha - Card 2º Passo -->
+                                <!-- Inicio :: 7ª Linha - Card 2º Passo -->
                                 <div class="row mb-3">
 
                                     <!-- Inicio :: 1ª Coluna - Card 2º Passo -->   
@@ -286,7 +297,7 @@
                                     <!-- Fim :: 1ª Coluna - Card 2º Passo -->   
 
                                 </div>
-                                <!-- Fim :: 5ª Linha - Card 2º Passo -->
+                                <!-- Fim :: 7ª Linha - Card 2º Passo -->
 
                             </div>
                             <!-- Fim :: Conteudo - Card 2º Passo -->

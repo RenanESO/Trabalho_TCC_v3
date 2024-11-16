@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\GoogleToken;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
@@ -21,14 +22,18 @@ class GoogleService
     public function __construct()
     {
         $this->login_id_usuario = Auth::id();
+
+        // Verifica se já existe um token de acesso
+        $googleToken = GoogleToken::where('user_id', $this->login_id_usuario)->first();       
+        
         $this->client = new Client();
         $this->client->setAuthConfig(storage_path('app/client_secret_497125052021-qheru49cjtj88353ta3d5bq6vf0ffk0o.apps.googleusercontent.com.json'));
         $this->client->addScope(Drive::DRIVE);
 
         $this->guzzleClient = new \GuzzleHttp\Client(['curl' => [CURLOPT_SSL_VERIFYPEER => false]]);
         $this->client->setHttpClient($this->guzzleClient);
-
-        $this->client->setAccessToken(session('access_token'));
+        
+        $this->client->setAccessToken($googleToken);
     }
 
     public function getClient()

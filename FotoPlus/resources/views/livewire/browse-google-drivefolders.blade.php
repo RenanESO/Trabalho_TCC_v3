@@ -1,4 +1,7 @@
-<div>
+<div>    
+    <button class="btn btn-primary mt-4" wire:click="voltar"> Voltar </button>
+    <button class="btn btn-success mt-4" wire:click="selecionar" data-bs-dismiss="modal"> Selecionar </button>
+
     <div class="list-view mt-4">
         @foreach ($arquivos as $arquivo)
             <div class="file-item">
@@ -13,7 +16,4 @@
             </div>
         @endforeach
     </div>
-
-    <button class="btn btn-primary mt-4" wire:click="voltar"> Voltar </button>
-    <button class="btn btn-success mt-4" wire:click="selecionar" data-bs-dismiss="modal"> Selecionar </button>
 </div>

@@ -17,18 +17,22 @@ class Training extends Component
     protected $paginationTheme = 'bootstrap';
 
     public $login_id_usuario;
+
+    public $caminho_deteccao_python_exe;
     public $caminho_compilador_python;
     public $caminho_deteccao_python;
+
+    public $caminho_pasta_public;
     public $caminho_arquivo_log;
-    public $caminho_arquivo_pickle;
-    public $caminho_arquivo_npy;
-    public $filtro_caminho_origem; 
+
+    public $caminho_imagem_treinamento; 
     public $nome_pessoa_cadastro;
     public $id_pessoa_treinamento;
     public $image_pessoa_treinamento;
+
     public $query_pessoas_cadastro;
+
     public $nome_botao_log; 
-    public $imagePath;
 
     // Função construtora da pagina no blade "Treinamento".
     public function mount() 
@@ -37,16 +41,16 @@ class Training extends Component
         $this->login_id_usuario = Auth::id();
 
         // Definindo as variaveis com os caminhos do compilador e aplicação Python.
+        $this->caminho_deteccao_python_exe = storage_path('app\\public\\deteccao\\dist\\principal.exe'); 
         $this->caminho_compilador_python = 'C:\\Users\\renan\\anaconda3\\envs\\Projeto_Deteccao\\python.exe';
-        $this->caminho_deteccao_python = storage_path('app\\public\\deteccao\\main.py'); 
+        $this->caminho_deteccao_python = storage_path('app\\public\\deteccao\\principal.py'); 
         
         // Definindo as variaveis com os caminhos dos arquivos e diretórios.
+        $this->caminho_pasta_public = storage_path('app\\public');
         $this->caminho_arquivo_log = storage_path('app\\public\\' .$this->login_id_usuario .'\\log.txt');
-        $this->caminho_arquivo_pickle = storage_path('app\\public\\' .$this->login_id_usuario .'\\indicesTreinamento.pickle');
-        $this->caminho_arquivo_npy = storage_path('app\\public\\' .$this->login_id_usuario .'\\fotosTreinamento.npy'); 
 
         // Definindo as variaveis para realizar a rotina de treinamento.
-        $this->filtro_caminho_origem = '';
+        $this->caminho_imagem_treinamento = '';
         $this->nome_pessoa_cadastro = '';
         $this->id_pessoa_treinamento = '';
         $this->image_pessoa_treinamento = null;
@@ -89,7 +93,7 @@ class Training extends Component
         try {
             if (file_exists($this->caminho_arquivo_log)) {
                 $texto_completo_log = file($this->caminho_arquivo_log);   
-                $texto_penultima_linha_log = $texto_completo_log[count($texto_completo_log) - 2];
+                $texto_penultima_linha_log = $texto_completo_log[count($texto_completo_log) - 1];
                 $this->nome_botao_log = 'Leia mais'; 
                 session()->flash('log', $texto_penultima_linha_log);  
             } else {
@@ -215,8 +219,8 @@ class Training extends Component
             $this->image_pessoa_treinamento = str_replace('public\\', '', $this->image_pessoa_treinamento);
             //session()->flash('debug', 'Caminho imagem rosto banco de dados: ' .$this->image_pessoa_treinamento);  
             
-            $this->filtro_caminho_origem = storage_path('app' .'\\' .'public' .'\\' . $this->image_pessoa_treinamento);       
-            //session()->flash('debug', 'Caminho imagem rosto storage: ' .$this->filtro_caminho_origem);  
+            $this->caminho_imagem_treinamento = storage_path('app' .'\\' .'public' .'\\' . $this->image_pessoa_treinamento);       
+            //session()->flash('debug', 'Caminho imagem rosto storage: ' .$this->caminho_imagem_treinamento);  
     
             // Cadastrado um novo rosto na tabela, referente a pessoa criada ou selecionada.
             Face::create([
@@ -225,27 +229,19 @@ class Training extends Component
             ]);
             
             $parametros = [     
-                '0',                            // Parametro referente a rotina de treianento que será realizada no python.          
-                $this->filtro_caminho_origem,   // Parametro referente ao caminho de origem.
-                'None',                         // Parametro referente ao caminho de destino.
-                $this->caminho_arquivo_log,     // Parametro referente ao caminho do arquivo log gerado pelo Python.
-                $this->caminho_arquivo_pickle,  // Parametro referente ao caminho do arquivo pickle.
-                $this->caminho_arquivo_npy,     // Parametro referente ao caminho do arquivo npy.
-                $this->id_pessoa_treinamento,   // Parametro referente ao id da pessoa que vai realizar o treinamento do rosto.
-                'None',                         // Parametro referente a data inicial do conjunto das fotos. 
-                'None',                         // Parametro referente a data final do conjunto das fotos. 
-                'None',                         // Parametro referente se as fotos devem ser copiadas ou recortadas.
-                'None'                          // Parametro referente quanto deve aumentar resolução das imagens.
+                'treinamento',                      // Parametro referente a rotina de treianento que será realizada no python.                   
+                $this->caminho_pasta_public,        // Parametro referente ao caminho da pasta public.
+                $this->login_id_usuario,            // Parametro referente ao ID do usuario logado.
+                $this->caminho_imagem_treinamento,  // Parametro referente ao caminho da imagem de treinamento.
+                $this->id_pessoa_treinamento        // Parametro referente ao ID da pessoa que vai realizar o treinamento do rosto.
             ];
 
-            // Chamada externa do python para realizar o treinamento da foto 
-            // da pessoa selecionada.
-            $comando = $this->caminho_compilador_python .' ' .$this->caminho_deteccao_python .' ' .implode(' ', $parametros);           
+            // Chamada externa do python para realizar o treinamento da foto da pessoa selecionada.
+            $comando = $this->caminho_deteccao_python_exe .' ' .implode(' ', $parametros);           
             session()->flash('debug', 'Comando: ' .$comando);
 
             $comando = escapeshellcmd($comando);
             $cmdResultado = shell_exec($comando); 
-            //$cmdResultado = shell_exec('echo %ERRORLEVEL%'); 
             //dd($cmdResultado);
 
             // Mostra o conteudo do arquivo log minimizado.
