@@ -81,6 +81,31 @@
         src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"
     ></script>
 
+    <!-- Logout ao Fechar a Tela -->
+    <script>
+        // Armazena uma flag no localStorage ao abrir a aba
+        window.addEventListener('load', () => {
+            localStorage.setItem('tab_active', 'true');
+        });
+    
+        // Remove a flag ao fechar a aba ou navegador
+        window.addEventListener('unload', () => {
+            localStorage.removeItem('tab_active');
+        });
+    
+        // Executa logout apenas se não houver mais abas ativas
+        window.addEventListener('beforeunload', function (event) {
+            setTimeout(() => {
+                if (!localStorage.getItem('tab_active')) {
+                    const url = "{{ route('logout') }}";
+                    const formData = new FormData();
+                    formData.append('_token', '{{ csrf_token() }}');
+                    navigator.sendBeacon(url, formData);
+                }
+            }, 100);  // Aguarda 100ms para verificar abas
+        });
+    </script>  
+
     <!-- Livewire Scripts -->
     @livewireScripts
 </body>
