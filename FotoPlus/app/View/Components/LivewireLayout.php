@@ -5,13 +5,13 @@ namespace App\View\Components;
 use Illuminate\View\Component;
 use Illuminate\View\View;
 
-class AppLivewireLayout extends Component
+class LivewireLayout extends Component
 {
     /**
      * Obtenha a visualização/conteúdo que representa o componente.
      */
     public function render(): View
     {
-        return view('layouts.applivewire');
+        return view('layouts.livewire');
     }
 }

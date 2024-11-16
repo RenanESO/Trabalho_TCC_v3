@@ -1,5 +1,5 @@
-<x-applivewire-layout>
+<x-livewire-layout>
 
     @livewire('organize')
 
-</x-applivewire-layout>
+</x-livewire-layout>

@@ -1,5 +1,5 @@
-<x-applivewire-layout>
+<x-livewire-layout>
 
     @livewire('help')
 
-</x-applivewire-layout>
+</x-livewire-layout>

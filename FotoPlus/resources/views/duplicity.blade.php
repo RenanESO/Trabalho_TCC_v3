@@ -1,5 +1,5 @@
-<x-applivewire-layout>
+<x-livewire-layout>
 
     @livewire('duplicity')
 
-</x-applivewire-layout>
+</x-livewire-layout>

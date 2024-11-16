@@ -1,5 +1,5 @@
-<x-applivewire-layout>
+<x-livewire-layout>
 
     @livewire('dashboard')
     
-</x-applivewire-layout>
+</x-livewire-layout>
