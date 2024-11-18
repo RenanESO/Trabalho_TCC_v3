@@ -29,6 +29,8 @@ class Duplicity extends Component
 
     public $nome_botao_log; 
 
+    public $achouArquivoZip = False;
+
     // Função construtora da pagina no blade "Duplicidade".
     public function mount()
     {
@@ -36,14 +38,13 @@ class Duplicity extends Component
         $this->login_id_usuario = Auth::id();
         
         // Definindo as variaveis com os caminhos do compilador e aplicação Python.
-        $this->caminho_deteccao_python_exe = storage_path('app\\public\\deteccao\\dist\\principal.exe'); 
-        $this->caminho_compilador_python = 'C:\\Users\\renan\\anaconda3\\envs\\Projeto_Deteccao\\python.exe';
-        $this->caminho_deteccao_python = storage_path('app\\public\\deteccao\\principal.py'); 
+        $this->caminho_deteccao_python_exe = storage_path('app/public/deteccao/dist/principal'); 
+        $this->caminho_deteccao_python = storage_path('app/public/deteccao/principal.py'); 
         
         // Definindo as variaveis com os caminhos dos arquivos e diretórios.
-        $this->caminho_pasta_public = storage_path('app\\public');
-        $this->caminho_arquivo_log = storage_path('app\\public\\' .$this->login_id_usuario .'\\log.txt');
-        $this->caminho_resultado = storage_path('app\\public\\' .$this->login_id_usuario .'\\resultado'); 
+        $this->caminho_pasta_public = storage_path('app/public');
+        $this->caminho_arquivo_log = storage_path('app/public/' .$this->login_id_usuario .'/log.txt');
+        $this->caminho_resultado = storage_path('app/public/' .$this->login_id_usuario .'/resultado'); 
 
         // Definindo as variaveis para realizar a rotina de duplicidade.       
         $this->filtro_data_inicial = now()->toDateString();
@@ -55,6 +56,9 @@ class Duplicity extends Component
 
         // Definindo a variavel com o nome do botão do resultado da rotina de duplicidade.
         $this->nome_botao_log = 'Leia mais';
+
+        // Definindo a variavel se encontrou algum arquivo de resultado para zipar.
+        $this->achouArquivoZip = False;
     }
 
     // Função render da pagina no blade "Duplicidade".
@@ -171,7 +175,7 @@ class Duplicity extends Component
             // Chamada externa do python para realizar a organização das fotos referente 
             // aos filtros selecionados.
             $comando = $this->caminho_deteccao_python_exe .' ' .implode(' ', $parametros);
-            session()->flash('debug', 'Comando: ' .$comando); 
+            //session()->flash('debug', 'Comando: ' .$comando); 
             
             $comando = escapeshellcmd($comando);
             $cmdResult = shell_exec($comando);
@@ -181,10 +185,15 @@ class Duplicity extends Component
 
             $this->criarZip();
 
-            session()->put('caminhoPastaGoogleDrive',  '');
-
-            // Redireciona para a rota de download
-            return redirect()->route('download-zip', ['user_id' => $this->login_id_usuario]); 
+            if ($this->achouArquivoZip == True) {
+                // Redireciona para a rota de download
+                return redirect()->route('download-zip', ['user_id' => $this->login_id_usuario]); 
+            }
+            else {
+                session()->flash('error', 'Não foi encontrado nenhuma foto como resultado.');
+                session()->put('caminhoPastaGoogleDrive',  '');
+                return redirect()->route('duplicity');
+            }
 
         } catch (Exception $e) {
             session()->flash('error', 'Ocorreu um erro interno, rotina "verificaDuplicidade". Erro: ' .$e->getMessage());
@@ -195,14 +204,16 @@ class Duplicity extends Component
 
     public function criarZip()
     {
+        $this->achouArquivoZip = False;
         $folderPath = $this->caminho_resultado; 
-        $zipFilePath = storage_path('app\\public\\' . $this->login_id_usuario . '\\resultado.zip');
+        $zipFilePath = storage_path('app/public/' .$this->login_id_usuario .'/resultado.zip');
 
         $zip = new ZipArchive;
         if ($zip->open($zipFilePath, ZipArchive::CREATE | ZipArchive::OVERWRITE) === TRUE) {
             $files = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($folderPath));
             foreach ($files as $file) {
                 if (!$file->isDir()) {
+                    $this->achouArquivoZip = True;
                     $relativePath = substr($file->getRealPath(), strlen($folderPath) + 1);                  
                     $zip->addFile($file->getRealPath(), $relativePath);
                 }

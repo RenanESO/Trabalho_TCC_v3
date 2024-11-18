@@ -41,13 +41,12 @@ class Training extends Component
         $this->login_id_usuario = Auth::id();
 
         // Definindo as variaveis com os caminhos do compilador e aplicação Python.
-        $this->caminho_deteccao_python_exe = storage_path('app\\public\\deteccao\\dist\\principal.exe'); 
-        $this->caminho_compilador_python = 'C:\\Users\\renan\\anaconda3\\envs\\Projeto_Deteccao\\python.exe';
-        $this->caminho_deteccao_python = storage_path('app\\public\\deteccao\\principal.py'); 
+        $this->caminho_deteccao_python_exe = storage_path('app/public/deteccao/dist/principal'); 
+        $this->caminho_deteccao_python = storage_path('app/public/deteccao/principal.py'); 
         
         // Definindo as variaveis com os caminhos dos arquivos e diretórios.
-        $this->caminho_pasta_public = storage_path('app\\public');
-        $this->caminho_arquivo_log = storage_path('app\\public\\' .$this->login_id_usuario .'\\log.txt');
+        $this->caminho_pasta_public = storage_path('app/public');
+        $this->caminho_arquivo_log = storage_path('app/public/' .$this->login_id_usuario .'/log.txt');
 
         // Definindo as variaveis para realizar a rotina de treinamento.
         $this->caminho_imagem_treinamento = '';
@@ -212,14 +211,14 @@ class Training extends Component
             ]);
 
             // Defina o caminho para armazenar a imagem
-            $caminho = $this->login_id_usuario .'\\' .'rostosCadastrados' .'\\' .$this->id_pessoa_treinamento;
+            $caminho = $this->login_id_usuario .'/' .'rostosCadastrados' .'/' .$this->id_pessoa_treinamento;
 
             $this->image_pessoa_treinamento = $this->image_pessoa_treinamento->store($caminho, 'public');
-            $this->image_pessoa_treinamento = str_replace('/', '\\', $this->image_pessoa_treinamento);
-            $this->image_pessoa_treinamento = str_replace('public\\', '', $this->image_pessoa_treinamento);
+            $this->image_pessoa_treinamento = str_replace('/', '/', $this->image_pessoa_treinamento);
+            $this->image_pessoa_treinamento = str_replace('public/', '', $this->image_pessoa_treinamento);
             //session()->flash('debug', 'Caminho imagem rosto banco de dados: ' .$this->image_pessoa_treinamento);  
             
-            $this->caminho_imagem_treinamento = storage_path('app' .'\\' .'public' .'\\' . $this->image_pessoa_treinamento);       
+            $this->caminho_imagem_treinamento = storage_path('app' .'/' .'public' .'/' . $this->image_pessoa_treinamento);       
             //session()->flash('debug', 'Caminho imagem rosto storage: ' .$this->caminho_imagem_treinamento);  
     
             // Cadastrado um novo rosto na tabela, referente a pessoa criada ou selecionada.

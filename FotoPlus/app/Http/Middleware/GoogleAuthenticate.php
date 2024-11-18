@@ -89,7 +89,7 @@ class GoogleAuthenticate
     {
         $client = new Client();
         
-        $client->setAuthConfig(storage_path('app\\client_secret_497125052021-qheru49cjtj88353ta3d5bq6vf0ffk0o.apps.googleusercontent.com.json'));
+        $client->setAuthConfig(storage_path('app/client_secret_497125052021-qheru49cjtj88353ta3d5bq6vf0ffk0o.apps.googleusercontent.com.json'));
         $client->setRedirectUri(route('dashboard')); 
         $client->setAccessType('offline');
         $client->setPrompt('select_account'); // Isso força o Google a pedir que o usuário selecione a conta

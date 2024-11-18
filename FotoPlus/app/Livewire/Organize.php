@@ -53,16 +53,15 @@ class Organize extends Component {
         $this->login_id_usuario = Auth::id();
 
         // Definindo as variaveis com os caminhos do compilador e aplicação Python.
-        $this->caminho_deteccao_python_exe = storage_path('app\\public\\deteccao\\dist\\principal.exe'); 
-        $this->caminho_compilador_python = 'C:\\Users\\renan\\anaconda3\\envs\\Projeto_Deteccao\\python.exe';
-        $this->caminho_deteccao_python = storage_path('app\\public\\deteccao\\principal.py'); 
+        $this->caminho_deteccao_python_exe = storage_path('app/public/deteccao/dist/principal'); 
+        $this->caminho_deteccao_python = storage_path('app/public/deteccao/principal.py'); 
         
         // Definindo as variaveis com os caminhos dos arquivos e diretórios.
-        $this->caminho_pasta_public = storage_path('app\\public');
-        $this->caminho_arquivo_log = storage_path('app\\public\\' .$this->login_id_usuario .'\\log.txt');
-        $this->caminho_arquivo_pickle = storage_path('app\\public\\' .$this->login_id_usuario .'\\indicesTreinamento.pickle');
-        $this->caminho_arquivo_npy = storage_path('app\\public\\' .$this->login_id_usuario .'\\fotosTreinamento.npy');
-        $this->caminho_resultado = storage_path('app\\public\\' .$this->login_id_usuario .'\\resultado'); 
+        $this->caminho_pasta_public = storage_path('app/public');
+        $this->caminho_arquivo_log = storage_path('app/public/' .$this->login_id_usuario .'/log.txt');
+        $this->caminho_arquivo_pickle = storage_path('app/public/' .$this->login_id_usuario .'/indicesTreinamento.pickle');
+        $this->caminho_arquivo_npy = storage_path('app/public/' .$this->login_id_usuario .'/fotosTreinamento.npy');
+        $this->caminho_resultado = storage_path('app/public/' .$this->login_id_usuario .'/resultado'); 
 
         // Definindo variavel de filtro da query de pessoas.
         $this->query_filtro_pessoa = '';
@@ -242,7 +241,7 @@ class Organize extends Component {
     public function criarZip()
     {
         $folderPath = $this->caminho_resultado; // Caminho da pasta de resultado
-        $zipFilePath = storage_path('app\\public\\' .$this->login_id_usuario .'\\resultado.zip');
+        $zipFilePath = storage_path('app/public/' .$this->login_id_usuario .'/resultado.zip');
 
         $zip = new ZipArchive;
         if ($zip->open($zipFilePath, ZipArchive::CREATE | ZipArchive::OVERWRITE) === TRUE) {
