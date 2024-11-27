@@ -33,9 +33,8 @@ class GoogleAuthenticate
             $client->setAccessToken($googleTokenArray);
 
             if ($client->isAccessTokenExpired()) {
-
+                
                 if ($googleTokenArray['refresh_token'] != '') {
-
                     // Tenta renovar o token com o refresh token
                     $newToken = $client->fetchAccessTokenWithRefreshToken($googleTokenArray['refresh_token']);
 
@@ -45,6 +44,7 @@ class GoogleAuthenticate
                     $googleToken->expires_in = isset($newToken['expires_in']) ? $newToken['expires_in'] : 0;
                     $googleToken->save();
                 } else {
+                    $googleToken->delete();
                     // Se não houver refresh token, redireciona para o fluxo de autenticação
                     return $this->redirectToGoogle($client);
                 }
@@ -65,7 +65,7 @@ class GoogleAuthenticate
             $client->setApprovalPrompt('force');
             $client->setPrompt('select_account');
             $newToken = $client->fetchAccessTokenWithAuthCode($request->input('code'));
-
+            //dd($newToken);
             GoogleToken::updateOrCreate(
                 ['user_id' => $user_id],
                 [
