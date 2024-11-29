@@ -8,7 +8,7 @@
 
             <!-- Inicio :: Titulo - Card Principal -->
             <div class="card-header">
-                <h3 class="text-center"> Treinamento imagem de uma pessoa </h3>
+                <h3 class="text-center"> Realizar o treinamento do rosto de uma pessoa </h3>
             </div>
             <!-- Fim :: Titulo - Card Principal -->
 
@@ -21,7 +21,7 @@
 
                 <!-- Inicio :: Carregamento -->
                 <div class="alert alert-primary text-center shadow-sm p-3 mx-3 mb-3 rounded"  wire:loading.grid wire:target="image_pessoa_treinamento, treinarPessoa, cadastrarPessoa, selecionarPessoa, alterarTamanhoLog, buscarImagem">
-                    <i class="fas fa-spinner fa-spin"></i> <span class="alert-text"> Aguarde alguns minutos carregando... </span>
+                    <i class="fas fa-spinner fa-spin"></i> <span class="alert-text"> Treinando, aguarde alguns minutos... </span>
                 </div>
                 <!-- Fim :: Carregamento -->
 
@@ -55,7 +55,7 @@
 
                             <!-- Inicio :: Titulo - Card 1º Passo -->
                             <div class="card-header">
-                                <h4 class="text"> 1º Passo: Carregar imagem </h4>
+                                <h4 class="text"> 1º Passo: Carregar foto do rosto de uma pessoa para o treinamento </h4>
                             </div>
                             <!-- Fim :: Titulo - Card 1º Passo -->
 
@@ -64,41 +64,84 @@
 
                                 <!-- Inicio :: 1ª Linha - Card 1º Passo -->
                                 <div class="row">
-
-                                    <!-- Inicio :: 1ª Coluna - Card 1º Passo -->
-                                    <div class="col-lg">    
-                                        
+                                    
+                                    <!-- Início :: 1ª Coluna - Card 1º Passo -->
+                                    <div class="col-lg">
                                         <div
-                                            x-data="{ isUploading: false, progress: 0 }"
-                                            x-on:livewire-upload-start="isUploading = true"
-                                            x-on:livewire-upload-finish="isUploading = false"
-                                            x-on:livewire-upload-error="isUploading = false"
-                                            x-on:livewire-upload-progress="progress = $event.detail.progress"
+                                            x-data="{
+                                                isUploading: false,
+                                                progress: 0,
+                                                errorMessage: '',
+                                                imagePreview: '',
+                                                handleFileInput(event) {
+                                                    const file = event.target.files[0];
+                                                    this.errorMessage = '';
+                                                    this.imagePreview = '';
+
+                                                    if (file) {
+                                                        const validTypes = ['image/jpeg', 'image/png', 'image/jpg'];
+                                                        if (!validTypes.includes(file.type)) {
+                                                            this.errorMessage = 'Por favor, selecione uma imagem válida (JPEG ou PNG).';
+                                                            return;
+                                                        }
+
+                                                        // Exibir pré-visualização
+                                                        const reader = new FileReader();
+                                                        reader.onload = (e) => {
+                                                            this.imagePreview = e.target.result;
+                                                        };
+                                                        reader.readAsDataURL(file);
+
+                                                        // Simulação de progresso
+                                                        this.isUploading = true;
+                                                        let progressInterval = setInterval(() => {
+                                                            this.progress += 10;
+                                                            if (this.progress >= 100) {
+                                                                clearInterval(progressInterval);
+                                                                this.isUploading = false;
+                                                            }
+                                                        }, 100);
+                                                    } else {
+                                                        this.errorMessage = 'Nenhum arquivo selecionado.';
+                                                    }
+                                                }
+                                            }"
                                         >
                                             <label class="custom-file-upload">
-                                                <input type="file" wire:model="image_pessoa_treinamento" accept=".jpg,.jpeg,.png" required> Selecione a Imagem
+                                                <input 
+                                                    type="file" 
+                                                    wire:model="image_pessoa_treinamento"
+                                                    accept=".jpg,.jpeg,.png" 
+                                                    required 
+                                                    x-on:change="handleFileInput"
+                                                >
+                                                Selecione a Imagem
                                             </label>
-                                            @error('image_pessoa_treinamento')
-                                                <span class="error"> {{ $message }} </span>
-                                            @enderror
-                                            <br><br>
-                                            @if ($image_pessoa_treinamento)
-                                                <img id="imagem-treinamento" src="{{ $image_pessoa_treinamento->temporaryUrl() }}" alt="Imagem Temporária do Treinamento">
-                                            @endif
 
-                                            <!-- Progress Bar -->
+                                            <!-- Mensagem de Erro -->
+                                            <span x-text="errorMessage" class="error" style="display: block; color: red;" x-show="errorMessage"></span>
+                                            
+                                            <!-- Pré-visualização da Imagem -->
+                                            <img 
+                                                id="imagem-treinamento" 
+                                                x-bind:src="imagePreview" 
+                                                alt="Imagem Temporária do Treinamento" 
+                                                style="display: block; max-width: 100%; margin-top: 10px;" 
+                                                x-show="imagePreview"
+                                            >
+
+                                            <!-- Barra de Progresso -->
                                             <div x-show="isUploading">
                                                 <div class="row p-3 mx-3">
                                                     <progress class="p-3" max="100" x-bind:value="progress"></progress>
                                                 </div>
-
                                                 <div class="row">
-                                                    <span class="text-center"> Carregando ... </span>
+                                                    <span class="text-center">Carregando...</span>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                    <!-- Fim :: 1ª Coluna - Card 1º Passo -->                                        
+                                    <!-- Fim :: 1ª Coluna - Card 1º Passo -->                                    
 
                                 </div>
                                 <!-- Fim :: 1ª Linha - Card 1º Passo -->
@@ -120,7 +163,7 @@
 
                             <!-- Inicio :: Titulo - Card 2º Passo -->
                             <div class="card-header">
-                                <h4 class="text">2º Passo: Cadastrar/Treinar pessoa</h4>
+                                <h4 class="text">2º Passo: Cadastrar/Treinar o rosto da pessoa</h4>
                             </div>
                             <!-- Fim :: Titulo - Card 2º Passo -->
 
@@ -132,7 +175,7 @@
 
                                     <!-- Inicio :: 1ª Coluna - Card 1º Passo -->    
                                     <div class="col-lg">
-                                        <form wire:submit.prevent="cadastrarPessoa" wire:confirm="Deseja realmente cadastrar essa Pessoa?">   
+                                        <form wire:submit.prevent="cadastrarPessoa" wire:confirm="Deseja realmente cadastrar e treinar esse rosto na foto?">   
                                             <div class="input-group mb-3">
                                                 <span class="input-group-text">Nome:</span>
                                                 <input class="campo-filtro form-control" type="text" placeholder="Nova Pessoa" wire:model="nome_pessoa_cadastro" required>
@@ -142,10 +185,14 @@
                                             </div>          
                                         </form>
                                     </div>
-                                    <!-- Fim :: 1ª Coluna - Card 1º Passo -->    
+                                    <!-- Fim :: 1ª Coluna - Card 1º Passo -->  
 
                                 </div>
                                 <!-- Fim :: 1ª Linha - Card 2º Passo -->
+
+                                <span class="text-secondary"> Atenção: Caso a imagem carregada contenha o rosto de uma pessoa que não esteja presente na lista abaixo, é necessário cadastrar essa pessoa no campo indicado acima. </span>
+
+                                <hr class="my-3">
 
                                 <!-- Inicio :: 2ª Linha - Card 2º Passo -->
                                 <div class="row mb-3">
@@ -252,7 +299,7 @@
 
                                     <!-- Inicio :: 1ª Coluna - Card 2º Passo -->   
                                     <div class="col-lg">
-                                        <form wire:submit.prevent="treinarPessoa" wire:confirm="Deseja realmente treinar essa Pessoa?">
+                                        <form wire:submit.prevent="treinarPessoa" wire:confirm="Deseja realmente treinar esse rosto na foto?">
                                             <div class="d-grid gap-2 col-4 mx-auto">                  
                                                 <button type="submit" class="btn btn-primary" onclick="voltaInicio()"> Treinar Selecionado </button>
                                             </div>

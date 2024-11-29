@@ -8,6 +8,7 @@ use Livewire\Component;
 use Livewire\WithPagination;
 use App\Models\Person;
 use Exception;
+use Illuminate\Support\Facades\Storage;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use ZipArchive;
@@ -185,6 +186,11 @@ class Organize extends Component {
             if (!$this->login_id_usuario) {
                 session()->flash('error', 'Não foi encontrado o ID do usuário logado.');
                 return redirect()->route('organize');   
+            }
+
+            // Verifica se o diretório do usuário existe. 
+            if (!Storage::disk('public')->exists($this->login_id_usuario)) {
+                Storage::disk('public')->makeDirectory($this->login_id_usuario);
             }
 
             // Verifica se o usuário selecionou alguma pessoa para identificar no conjunto de imagens.

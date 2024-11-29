@@ -21,7 +21,7 @@
 
                 <!-- Inicio :: Carregamento -->
                 <div class="alert alert-primary text-center shadow-sm p-3 mx-3 mb-3 rounded" wire:loading.grid wire:target="organizar, selecionarPessoa, alterarTamanhoLog, alterarStatusData">
-                    <i class="fas fa-spinner fa-spin"></i> <span class="alert-text"> Aguarde alguns minutos carregando... </span>
+                    <i class="fas fa-spinner fa-spin"></i> <span class="alert-text"> Processando, aguarde alguns minutos... </span>
                 </div>
                 <!-- Fim :: Carregamento -->
 
@@ -193,7 +193,7 @@
 
                                     <!-- Inicio :: 1ª Coluna - Card 2º Passo -->
                                     <div class="col-md-7">    
-                                        <span class="text-danger"> Atenção: Aumentando resolução afeta no tempo de carregamento. </span>
+                                        <span class="text-danger"> Atenção: Aumentando resolução afeta no tempo de processamento. </span>
                                     </div>
                                     <!-- Fim :: 1ª Coluna - Card 2º Passo -->
 

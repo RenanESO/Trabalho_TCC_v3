@@ -237,7 +237,7 @@ class Training extends Component
 
             // Chamada externa do python para realizar o treinamento da foto da pessoa selecionada.
             $comando = $this->caminho_deteccao_python_exe .' ' .implode(' ', $parametros);           
-            session()->flash('debug', 'Comando: ' .$comando);
+            //session()->flash('debug', 'Comando: ' .$comando);
 
             $comando = escapeshellcmd($comando);
             $cmdResultado = shell_exec($comando); 

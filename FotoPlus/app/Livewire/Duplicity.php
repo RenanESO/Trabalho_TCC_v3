@@ -5,6 +5,7 @@ namespace App\Livewire;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Exception;
+use Illuminate\Support\Facades\Storage;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use ZipArchive;
@@ -151,6 +152,11 @@ class Duplicity extends Component
             if (!$this->login_id_usuario) {
                 session()->flash('error', 'Não foi encontrado o ID do usuário logado.');
                 return redirect()->route('duplicity');   
+            }
+
+            // Verifica se o diretório do usuário existe. 
+            if (!Storage::disk('public')->exists($this->login_id_usuario)) {
+                Storage::disk('public')->makeDirectory($this->login_id_usuario);
             }
 
             // Verifica se foi preenchido os campos de parâmetros.

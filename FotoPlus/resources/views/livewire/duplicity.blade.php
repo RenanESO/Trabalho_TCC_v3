@@ -21,7 +21,7 @@
 
                 <!-- Inicio :: Carregamento -->
                 <div class="alert alert-primary text-center shadow-sm p-3 mx-3 mb-3 rounded" wire:loading.grid wire:target="verificaDuplicidade, alterarTamanhoLog, alterarStatusData">
-                    <i class="fas fa-spinner fa-spin"></i> <span class="alert-text"> Aguarde alguns minutos carregando... </span>
+                    <i class="fas fa-spinner fa-spin"></i> <span class="alert-text"> Processando, aguarde alguns minutos... </span>
                 </div>
                 <!-- Fim :: Carregamento -->
 

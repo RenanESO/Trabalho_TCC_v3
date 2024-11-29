@@ -16,7 +16,7 @@
                     <div class="row gx-5">
 
                         <div class="col-lg">
-                            <div class="p-3">
+                            <div class="p-4">
                                 <h1>
                                     Repositório <br> Otimizado
                                 </h1>
@@ -28,7 +28,7 @@
                     <div class="row gx-5">
 
                         <div class="col-lg-6">
-                            <div class="p-3">
+                            <div class="p-4">
                                 <h3>
                                     Resolva seus problemas de organização com os repositórios de fotos, 
                                     utilizando a inteligência do FotoPlus. Organize fotos por datas, 
@@ -45,15 +45,15 @@
 
                     </div>
 
+                    <!--
                     <div class="row gx-5">
-
-                        <div class="col-lg">
+                        <div class="col-md-auto">
                             <div class="p-3">
                                 <a href="{{ route('login') }}" class="btn btn-success"> Confira Agora </a>
                             </div>
                         </div>
-
                     </div>
+                    -->
 
                     <br><br>
                 
