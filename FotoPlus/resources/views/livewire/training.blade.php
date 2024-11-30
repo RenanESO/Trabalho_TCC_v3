@@ -48,7 +48,7 @@
                 <div class="row mb-3">
 
                     <!-- Inicio :: 1ª Coluna - Card Principal -->
-                    <div class="col-lg">
+                    <div class="col-lg mb-3">
 
                         <!-- Inicio :: Card 1º Passo -->
                         <div class="card">
@@ -156,7 +156,7 @@
                     <!-- Fim :: 1ª Coluna - Card Principal -->
 
                     <!-- Inicio :: 2ª Coluna - Card Principal -->
-                    <div class="col-lg">
+                    <div class="col-lg mb-3">
 
                         <!-- Inicio :: Card 2º Passo -->
                         <div class="card">
@@ -175,7 +175,7 @@
 
                                     <!-- Inicio :: 1ª Coluna - Card 1º Passo -->    
                                     <div class="col-lg">
-                                        <form wire:submit.prevent="cadastrarPessoa" wire:confirm="Deseja realmente cadastrar e treinar esse rosto na foto?">   
+                                        <form wire:submit.prevent="cadastrarPessoa" wire:confirm="Deseja realmente cadastrar e treinar esse rosto da foto?">   
                                             <div class="input-group mb-3">
                                                 <span class="input-group-text">Nome:</span>
                                                 <input class="campo-filtro form-control" type="text" placeholder="Nova Pessoa" wire:model="nome_pessoa_cadastro" required>
@@ -299,7 +299,7 @@
 
                                     <!-- Inicio :: 1ª Coluna - Card 2º Passo -->   
                                     <div class="col-lg">
-                                        <form wire:submit.prevent="treinarPessoa" wire:confirm="Deseja realmente treinar esse rosto na foto?">
+                                        <form wire:submit.prevent="treinarPessoa" wire:confirm="Deseja realmente treinar esse rosto da foto?">
                                             <div class="d-grid gap-2 col-4 mx-auto">                  
                                                 <button type="submit" class="btn btn-primary" onclick="voltaInicio()"> Treinar Selecionado </button>
                                             </div>

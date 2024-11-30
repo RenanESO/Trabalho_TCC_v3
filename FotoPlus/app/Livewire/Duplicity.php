@@ -154,6 +154,12 @@ class Duplicity extends Component
                 return redirect()->route('duplicity');   
             }
 
+            // Verifica se o caminho da pasta do Google Drive está definido.
+            if (!session('caminhoPastaGoogleDrive')) {
+                session()->flash('error', 'Não foi encontrado a pasta selecionada do Google Drive.');
+                return redirect()->route('duplicity');                  
+            }
+
             // Verifica se o diretório do usuário existe. 
             if (!Storage::disk('public')->exists($this->login_id_usuario)) {
                 Storage::disk('public')->makeDirectory($this->login_id_usuario);
