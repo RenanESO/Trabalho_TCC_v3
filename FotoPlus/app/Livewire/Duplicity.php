@@ -30,7 +30,7 @@ class Duplicity extends Component
 
     public $nome_botao_log; 
 
-    public $achouArquivoZip = False;
+    public $achouArquivoZip;
 
     // Função construtora da pagina no blade "Duplicidade".
     public function mount()

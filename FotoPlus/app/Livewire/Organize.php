@@ -45,7 +45,7 @@ class Organize extends Component {
 
     public $nome_botao_log; 
 
-    public $downloadLink;
+    public $achouArquivoZip = False;
 
     // Função construtora da pagina no blade "Organizar".
     public function mount()
@@ -80,7 +80,8 @@ class Organize extends Component {
         // Definindo a variavel com o nome do botão do resultado da rotina de organizar.
         $this->nome_botao_log = 'Leia mais';
 
-        $this->downloadLink = '';
+        // Definindo a variavel se encontrou algum arquivo de resultado para zipar.
+        $this->achouArquivoZip = False;
     }
 
     public function render() 
@@ -188,15 +189,21 @@ class Organize extends Component {
                 return redirect()->route('organize');   
             }
 
-            // Verifica se o diretório do usuário existe. 
-            if (!Storage::disk('public')->exists($this->login_id_usuario)) {
-                Storage::disk('public')->makeDirectory($this->login_id_usuario);
+            // Verifica se o caminho da pasta do Google Drive está definido.
+            if (!session('caminhoPastaGoogleDrive')) {
+                session()->flash('error', 'Não foi encontrado a pasta selecionada do Google Drive.');
+                return redirect()->route('duplicity');                  
             }
 
             // Verifica se o usuário selecionou alguma pessoa para identificar no conjunto de imagens.
             if ($this->filtro_pessoa_organizar == '') {
-                session()->flash('error', 'Favor informar uma pessoa para organizar as imagens.');
+                session()->flash('error', 'Favor informar uma pessoa para organizar as fotos.');
                 return redirect()->route('organize');   
+            }
+
+            // Verifica se o diretório do usuário existe. 
+            if (!Storage::disk('public')->exists($this->login_id_usuario)) {
+                Storage::disk('public')->makeDirectory($this->login_id_usuario);
             }
 
             // Verifica se foi preenchido os campos de parâmetros.
@@ -223,19 +230,25 @@ class Organize extends Component {
             // Chamada externa do python para realizar a organização das fotos 
             // referente aos filtros selecionados.
             $comando = $this->caminho_deteccao_python_exe .' ' .implode(' ', $parametros);       
-            session()->flash('debug', 'Comando: ' .$comando);  
+            //session()->flash('debug', 'Comando: ' .$comando);  
 
             $comando = escapeshellcmd($comando);
             $cmdResult = shell_exec($comando);
 
             // Mostra o conteudo do arquivo log minimizado.
             $this->mostrarLogMinimizado();
+
             $this->criarZip();
 
-            session()->put('caminhoPastaGoogleDrive',  '');
-
-            // Redireciona para a rota de download
-            return redirect()->route('download-zip', ['user_id' => $this->login_id_usuario]); 
+            if ($this->achouArquivoZip == True) {
+                // Redireciona para a rota de download
+                return redirect()->route('download-zip', ['user_id' => $this->login_id_usuario]); 
+            }
+            else {
+                session()->flash('error', 'Não foi encontrado nenhuma foto como resultado.');
+                session()->put('caminhoPastaGoogleDrive',  '');
+                return redirect()->route('duplicity');
+            }
         
         } catch (Exception $e) {
             session()->flash('error', 'Ocorreu um erro interno, rotina "organizar". Erro: ' .$e->getMessage());
@@ -246,6 +259,7 @@ class Organize extends Component {
 
     public function criarZip()
     {
+        $this->achouArquivoZip = False;
         $folderPath = $this->caminho_resultado; // Caminho da pasta de resultado
         $zipFilePath = storage_path('app/public/' .$this->login_id_usuario .'/resultado.zip');
 
@@ -254,6 +268,7 @@ class Organize extends Component {
             $files = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($folderPath));
             foreach ($files as $file) {
                 if (!$file->isDir()) {
+                    $this->achouArquivoZip = True;
                     $relativePath = substr($file->getRealPath(), strlen($folderPath) + 1);                  
                     $zip->addFile($file->getRealPath(), $relativePath);
                 }

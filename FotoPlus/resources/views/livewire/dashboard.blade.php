@@ -10,43 +10,6 @@
 
             <!-- Inicio :: 1ª Coluna - Menu -->
             <div class="col-lg">
-                <div class="card m-2" style="cursor: pointer;" onclick="location.href='{{ route('organize') }}'">
-                    <img src="{{ asset('imagens/iconeOrganizar.png') }}" class="card-img-top" alt="card-Organizar">
-                    <div class="card-body">
-                        <h5 class="card-title">Organizar conjunto de fotos</h5>
-                        <p class="card-text">
-                            Organize suas fotos localizadas no Google Drive pelos 
-                            filtros de data e pessoas. Ajudando na organização de 
-                            sua galeria.
-                        </p>
-                    </div>
-                    <div class="card-footer d-grid gap-2">
-                        <a href="{{ route('organize') }}" class="btn btn-primary">Selecionar</a>
-                    </div>
-                </div>
-            </div>
-            <!-- Fim :: 1ª Coluna - Menu -->
-
-            <!-- Inicio :: 2ª Coluna - Menu -->
-            <div class="col-lg">
-                <div class="card m-2" style="cursor: pointer;" onclick="location.href='{{ route('duplicity') }}'">
-                    <img src="{{ asset('imagens/iconeDuplicidade.png') }}" class="card-img-top" alt="card-Duplicidade">
-                    <div class="card-body">
-                        <h5 class="card-title">Encontrar duplicidade de fotos</h5>
-                        <p class="card-text">
-                            Encontre possíveis duplicidades de fotos localizadas em uma pasta 
-                            específica no Google Drive.
-                        </p>
-                    </div>
-                    <div class="card-footer d-grid gap-2">
-                        <a href="{{ route('duplicity') }}" class="btn btn-primary">Selecionar</a>
-                    </div>
-                </div>
-            </div>
-            <!-- Fim :: 1ª Coluna - Menu -->
-
-            <!-- Inicio :: 3ª Coluna - Menu -->
-            <div class="col-lg">
                 <div class="card m-2" style="cursor: pointer;" onclick="location.href='{{ route('training') }}'">
                     <img src="{{ asset('imagens/iconeTreinamento.png') }}" class="card-img-top" alt="card-Treinamento">
                     <div class="card-body">
@@ -62,6 +25,43 @@
                 </div>
             </div>
             <!-- Fim :: 1ª Coluna - Menu -->
+
+            <!-- Inicio :: 2ª Coluna - Menu -->
+            <div class="col-lg">
+                <div class="card m-2" style="cursor: pointer;" onclick="location.href='{{ route('organize') }}'">
+                    <img src="{{ asset('imagens/iconeOrganizar.png') }}" class="card-img-top" alt="card-Organizar">
+                    <div class="card-body">
+                        <h5 class="card-title">Organizar conjunto de fotos</h5>
+                        <p class="card-text">
+                            Organize suas fotos localizadas no Google Drive pelos 
+                            filtros de data e pessoas. Ajudando na organização de 
+                            sua galeria.
+                        </p>
+                    </div>
+                    <div class="card-footer d-grid gap-2">
+                        <a href="{{ route('organize') }}" class="btn btn-primary">Selecionar</a>
+                    </div>
+                </div>
+            </div>
+            <!-- Fim :: 2ª Coluna - Menu -->
+
+            <!-- Inicio :: 3ª Coluna - Menu -->
+            <div class="col-lg">
+                <div class="card m-2" style="cursor: pointer;" onclick="location.href='{{ route('duplicity') }}'">
+                    <img src="{{ asset('imagens/iconeDuplicidade.png') }}" class="card-img-top" alt="card-Duplicidade">
+                    <div class="card-body">
+                        <h5 class="card-title">Encontrar duplicidade de fotos</h5>
+                        <p class="card-text">
+                            Encontre possíveis duplicidades de fotos localizadas em uma pasta 
+                            específica no Google Drive.
+                        </p>
+                    </div>
+                    <div class="card-footer d-grid gap-2">
+                        <a href="{{ route('duplicity') }}" class="btn btn-primary">Selecionar</a>
+                    </div>
+                </div>
+            </div>
+            <!-- Fim :: 3ª Coluna - Menu -->
 
         </div>
         <!-- Fim :: 1ª Linha - Menu -->
