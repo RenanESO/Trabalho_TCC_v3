@@ -247,7 +247,7 @@ class Organize extends Component {
             else {
                 session()->flash('error', 'Não foi encontrado nenhuma foto como resultado.');
                 session()->put('caminhoPastaGoogleDrive',  '');
-                return redirect()->route('duplicity');
+                return redirect()->route('organize');
             }
         
         } catch (Exception $e) {

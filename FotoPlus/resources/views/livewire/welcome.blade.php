@@ -31,8 +31,8 @@
                             <div class="p-4">
                                 <h3>
                                     Resolva seus problemas de organização com os repositórios de fotos, 
-                                    utilizando a inteligência do FotoPlus. Organize fotos por datas, 
-                                    locais, pessoas e outros filtros.
+                                    utilizando a inteligência do FotoPlus. Encontre fotos duplicadas e 
+                                    organize fotos por datas, e pessoas e outros filtros.
                                 </h3>
                             </div>
                         </div>
