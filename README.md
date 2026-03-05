@@ -15,7 +15,7 @@
   <img src="https://img.shields.io/badge/status-disponível-brightgreen?style=for-the-badge" />
 </p>
 
-# FotoPlus - Organizador de Fotos com Reconhecimento Facial (TCC)
+# 📷 FotoPlus - Organizador de Fotos com Reconhecimento Facial (TCC)
 
 ## 📋 Sobre o Projeto
 
@@ -26,6 +26,8 @@ O sistema permite que o usuário:
 2.  **Treine o sistema** identificando pessoas em fotos (face tagging).
 3.  **Organize automaticamente** as fotos baixadas, agrupando-as em pastas baseadas nas pessoas identificadas.
 4.  **Detecte duplicidade** de imagens para economizar espaço.
+
+> **Nota:** Este projeto trabalha em conjunto com o repositório que utiliza Python para IA do projeto: [Trabalho_TCC_Python_v3 FotoPlus](https://github.com/seu-usuario/Trabalho_TCC_Python_v3).
 
 ## 🚀 Tecnologias Utilizadas
 
